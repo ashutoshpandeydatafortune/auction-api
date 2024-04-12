@@ -1,16 +1,15 @@
-version: '3.8'  # Use Docker Compose file format version 3.8
+version: '3.8'  # Using Docker Compose file format version 3.8
 
 services:
   postgres:
-    image: postgres:latest  # Specifies to use the latest official PostgreSQL image
+    image: postgres:latest  # Use the latest official PostgreSQL image
     environment:
-      POSTGRES_PASSWORD: postgres123  # Sets the password for the PostgreSQL superuser
-      POSTGRES_USER: postgres         # Sets the username for the PostgreSQL superuser
-      POSTGRES_DB: auctionsdb         # Sets the default database that is created when the image is first started
+      POSTGRES_PASSWORD: postgres123  # Sets the superuser password
+      POSTGRES_USER: postgres         # Sets the superuser name
+      POSTGRES_DB: auctionsdb         # Sets the default database to be created
     ports:
       - "5432:5432"  # Maps port 5432 of the container to port 5432 on the host
     volumes:
-      - ./auctionsdata:/var/lib/postgresql/data  # Mounts the volume 'pgdata' to persist database data
+      - ./mylocal_pgdata:/var/lib/postgresql/data  # Bind mount for PostgreSQL data
 
-volumes:
-  pgdata:  # Declares a volume named 'pgdata' that Docker manages
+# Note: No 'volumes' section needed for bind mounts as we define the path directly
