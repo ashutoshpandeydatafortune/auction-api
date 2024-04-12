@@ -1,4 +1,5 @@
 using AuctionService.DB;
+using AuctionService.DB.Seeders;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<AuctionDBContext>(opt =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,5 +27,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+try
+{
+    DBInitializer.InitDb(app);
+}
+catch(Exception ex)
+{
+    Console.WriteLine("Cannot initialize seed: " + ex.Message);
+}
 
 app.Run();
