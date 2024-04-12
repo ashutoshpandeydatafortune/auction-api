@@ -1,7 +1,9 @@
 ﻿using AuctionService.Entities.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AuctionService.Entities
 {
+    [Table("Auctions")]
     public class Auction
     {
         public Guid Id { get; set; }
