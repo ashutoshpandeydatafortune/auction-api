@@ -12,4 +12,14 @@ services:
     volumes:
       - ./mylocal_pgdata:/var/lib/postgresql/data  # Bind mount for PostgreSQL data
 
+  mongodb:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=mongo123
+    ports:
+      - 27018:27017  # already mongo running on local 
+    volumes:
+      - ./mylocal_mongodata:/var/lib/mongodb/data  # Bind mount for PostgreSQL data
+
 # Note: No 'volumes' section needed for bind mounts as we define the path directly
