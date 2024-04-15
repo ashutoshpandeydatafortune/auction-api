@@ -1,3 +1,4 @@
+using MassTransit;
 using AuctionService.DB;
 using AuctionService.DB.Seeders;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 var app = builder.Build();
 

@@ -3,6 +3,8 @@ using AuctionService.DTO;
 using AuctionService.Entities;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Contracts;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,11 +16,13 @@ namespace AuctionService.Controllers
     {
         private readonly IMapper _mapper;
         private readonly AuctionDBContext _context;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public AuctionsController(AuctionDBContext context, IMapper mapper) 
+        public AuctionsController(AuctionDBContext context, IMapper mapper, IPublishEndpoint publishEndpoint) 
         {
             _mapper = mapper;
             _context = context;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpGet]
@@ -57,6 +61,10 @@ namespace AuctionService.Controllers
             var created = await _context.SaveChangesAsync() > 0;
 
             if (!created) return BadRequest("Invalid request, cannot save to database");
+
+            // publish to RabitMQ Queue
+            var newAuction = _mapper.Map<AuctionDTO>(auction);
+            await _publishEndpoint.Publish(_mapper.Map<AuctionCreated>(newAuction));
 
             return CreatedAtAction(nameof(GetAuctionById), new {auction.Id}, _mapper.Map<AuctionDTO>(auction));
         }

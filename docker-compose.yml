@@ -22,4 +22,9 @@ services:
     volumes:
       - ./mylocal_mongodata:/var/lib/mongodb/data  # Bind mount for PostgreSQL data
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
 # Note: No 'volumes' section needed for bind mounts as we define the path directly
