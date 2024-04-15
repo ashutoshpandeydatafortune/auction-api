@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Entities;
+﻿using MongoDB.Entities;
 
 namespace SearchService.Models
 {

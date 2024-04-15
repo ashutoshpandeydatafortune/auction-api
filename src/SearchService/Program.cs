@@ -1,6 +1,4 @@
-using MongoDB.Driver;
-using MongoDB.Entities;
-using SearchService.Models;
+using SearchService.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,15 +12,15 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-await DB.InitAsync("auctionsdb", MongoClientSettings.FromConnectionString(
-    builder.Configuration.GetConnectionString("DefaultConnectionString"))
-);
 
-await DB.Index<Item>()
-    .Key(x => x.Make, KeyType.Text)
-    .Key(x => x.Model, KeyType.Text)
-    .Key(x => x.Color, KeyType.Text)
-    .CreateAsync();
+try
+{
+    await DBInitializer.InitDb(app);
+}
+catch(Exception ex)
+{
+    Console.WriteLine("Cannot initialize seed data: " + ex.Message);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
