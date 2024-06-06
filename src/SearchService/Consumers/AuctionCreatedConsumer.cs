@@ -1,5 +1,5 @@
-﻿using AutoMapper;
 using Contracts;
+using AutoMapper;
 using MassTransit;
 using MongoDB.Entities;
 using SearchService.Models;
@@ -17,7 +17,7 @@ namespace SearchService.Consumers
 
         public async Task Consume(ConsumeContext<AuctionCreated> context)
         {
-            Console.WriteLine("--> Consume message: " + context.Message.Id);
+            Console.WriteLine("-------> Consuming auction created: " + context.Message.Id);
 
             var item = _mapper.Map<Item>(context.Message);
 
