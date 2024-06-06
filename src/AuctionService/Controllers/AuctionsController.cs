@@ -2,6 +2,8 @@
 using AuctionService.DTO;
 using AuctionService.Entities;
 using AutoMapper;
+using Contracts;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,11 +15,13 @@ namespace AuctionService.Controllers
     {
         private readonly IMapper _mapper;
         private readonly AuctionDBContext _context;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public AuctionsController(AuctionDBContext context, IMapper mapper) 
+        public AuctionsController(AuctionDBContext context, IMapper mapper, IPublishEndpoint publishEndpoint) 
         {
             _mapper = mapper;
             _context = context;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpGet]
@@ -54,6 +58,10 @@ namespace AuctionService.Controllers
 
             if (!created) return BadRequest("Invalid request, cannot save to database");
 
+            var newAuction = _mapper.Map<AuctionDTO>(auction);
+
+            await _publishEndpoint.Publish(_mapper.Map<AuctionCreated>(newAuction));
+
             return CreatedAtAction(nameof(GetAuctionById), new {auction.Id}, _mapper.Map<AuctionDTO>(auction));
         }
 
@@ -75,6 +83,8 @@ namespace AuctionService.Controllers
 
             if (!updated) return BadRequest("Invalid request, cannot save to database");
 
+            await _publishEndpoint.Publish(_mapper.Map<AuctionUpdated>(auction));
+
             return CreatedAtAction(nameof(GetAuctionById), new { auction.Id }, _mapper.Map<AuctionDTO>(auction));
         }
 
@@ -90,6 +100,8 @@ namespace AuctionService.Controllers
             var deleted = await _context.SaveChangesAsync() > 0;
 
             if (!deleted) return BadRequest("Invalid id, cannot be removed");
+
+            await _publishEndpoint.Publish(_mapper.Map<AuctionDeleted>(auction));
 
             return Ok();
         }

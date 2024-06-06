@@ -1,5 +1,6 @@
 using AuctionService.DB;
 using AuctionService.DB.Seeders;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,14 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AuctionDBContext>(opt =>
 {
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionString"));
+});
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+    });
 });
 
 // Add services to the container.

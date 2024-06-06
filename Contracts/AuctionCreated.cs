@@ -1,6 +1,6 @@
-﻿namespace AuctionService.DTO
+﻿namespace Contracts
 {
-    public class AuctionDTO
+    public class AuctionCreated
     {
         public Guid Id { get; set; }
         public int? SoldAmount { get; set; }
