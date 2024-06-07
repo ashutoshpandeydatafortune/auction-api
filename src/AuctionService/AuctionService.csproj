@@ -24,4 +24,12 @@
     <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\ashut\Documents\codes\microservice\auction-api\src\AuctionService\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\ashut\Documents\codes\microservice\auction-api\src\AuctionService\.editorconfig" />
+  </ItemGroup>
+
 </Project>
