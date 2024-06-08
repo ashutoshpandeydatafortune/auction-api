@@ -2,8 +2,7 @@
 {
     public class AuctionUpdated
     {
-        public string Id { get; set; } = string.Empty;
-
+        public string Id { get; set; }
         public int? Year { get; set; }
         public int? Milleage { get; set; }
         public int ReservePrice { get; set; }

@@ -1,7 +1,7 @@
-﻿namespace Contracts.Contracts
+﻿namespace Contracts
 {
-    internal class AuctionDeleted
+    public class AuctionDeleted
     {
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; }  
     }
 }
