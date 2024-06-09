@@ -12,4 +12,5 @@
 
 	Go to root directory where solution file is present
 
-	Run:  docker-compose up -d
+	Run:  docker build -f .\src\AuctionService\Dockerfile -t tagname .
+	      docker-compose up
