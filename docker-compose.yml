@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: postgres         # Sets the superuser name
       POSTGRES_DB: auctionsdb         # Sets the default database to be created
     ports:
-      - "5432:5432"  # Maps port 5432 of the container to port 5432 on the host
+      - "5433:5432"  # Maps port 5433 of the container to port 5432 on the host
     volumes:
       - ./mylocal_pgdata:/var/lib/postgresql/data  # Bind mount for PostgreSQL data
 
@@ -43,4 +43,18 @@ services:
       - postgres
       - rabbitmq
 
+  search-svc:
+    image: ashutoshpandey/search-svc:latest
+    build:
+      context: .
+      dockerfile: src/SearchService/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - RabbitMq__Host=rabbitmq
+      - ConnectionStrings__DefaultConnection=Server=mongodb://root:mongo123@localhost:27018/auctionsdb?authSource=admin
+      - IdentityServiceUrl=http://identity-svc
+    depends_on:
+      - postgres
+      - rabbitmq
   
