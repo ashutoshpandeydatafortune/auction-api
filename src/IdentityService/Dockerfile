@@ -15,12 +15,12 @@ COPY src/IdentityService/IdentityService.csproj src/IdentityService/IdentityServ
 RUN dotnet restore carsties.sln
 
 # Copy the rest of the source code into the container
-COPY src/GatewayService src/GatewayService
+COPY src/IdentityService src/IdentityService
 
-# Set the working directory to the GatewayService project directory
-WORKDIR /app/src/GatewayService
+# Set the working directory to the IdentityService project directory
+WORKDIR /app/src/IdentityService
 
-# Build and publish the GatewayService project to the /app/out directory
+# Build and publish the IdentityService project to the /app/out directory
 RUN dotnet publish -c Release -o /app/src/out
 
 # Use the ASP.NET runtime image for running the application
@@ -30,5 +30,5 @@ WORKDIR /app
 # Copy the published output from the build stage to the current working directory in the runtime image
 COPY --from=build /app/src/out .
 
-# Set the entry point for the container to run the GatewayService.dll using the dotnet command
-ENTRYPOINT ["dotnet", "GatewayService.dll"]
+# Set the entry point for the container to run the IdentityService.dll using the dotnet command
+ENTRYPOINT ["dotnet", "IdentityService.dll"]
