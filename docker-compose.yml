@@ -11,6 +11,11 @@ services:
       - "5433:5432"  # Maps port 5433 of the container to port 5432 on the host
     volumes:
       - ./mylocal_pgdata:/var/lib/postgresql/data  # Bind mount for PostgreSQL data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   mongodb:
     image: mongo:latest
@@ -21,12 +26,22 @@ services:
       - 27018:27017  # already mongo running on local 
     volumes:
       - ./mylocal_mongodata:/var/lib/mongodb/data  # Bind mount for PostgreSQL data
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.runCommand(\"ping\").ok' | mongo localhost:27017/test --quiet"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   rabbitmq:
     image: rabbitmq:3-management-alpine         # default credentials guest/guest
     ports:
       - 5672:5672
       - 15672:15672
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   auction-svc:
     image: ashutoshpandey/auction-svc:latest
@@ -42,8 +57,10 @@ services:
     ports:
       - 7001:80
     depends_on:
-      - postgres
-      - rabbitmq
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
 
   search-svc:
     image: ashutoshpandey/search-svc:latest
@@ -59,8 +76,10 @@ services:
     ports:
       - 7002:80
     depends_on:
-      - mongodb
-      - rabbitmq
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
 
   identity-svc:
     image: ashutoshpandey/identity-svc:latest
@@ -74,7 +93,8 @@ services:
     ports:
       - 5000:80
     depends_on:
-      - postgres
+      mongodb:
+        condition: service_healthy
 
   gateway-svc:
     image: ashutoshpandey/gateway-svc:latest
@@ -87,5 +107,6 @@ services:
     ports:
       - 6001:80
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
   
