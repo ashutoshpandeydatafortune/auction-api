@@ -9,7 +9,7 @@ namespace SearchService.Seeders
         public static async Task InitDb(WebApplication app)
         {
             await DB.InitAsync("auctionsdb", MongoClientSettings.FromConnectionString(
-                app.Configuration.GetConnectionString("DefaultConnectionString"))
+                app.Configuration.GetConnectionString("DefaultConnection"))
             );
 
             await DB.Index<Item>()
@@ -17,6 +17,8 @@ namespace SearchService.Seeders
                 .Key(x => x.Model, KeyType.Text)
                 .Key(x => x.Color, KeyType.Text)
                 .CreateAsync();
+
+            Console.WriteLine("Setting up search database done");
         }
     }
 }

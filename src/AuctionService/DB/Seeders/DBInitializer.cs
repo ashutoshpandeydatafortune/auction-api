@@ -21,7 +21,17 @@ namespace AuctionService.DB.Seeders
                 return;
             }
 
-            context.Database.Migrate();
+            Console.WriteLine("Migrating database");
+            try
+            {
+                context.Database.Migrate();
+                Console.WriteLine("Database migrated");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Cannot run migration: " + ex.Message);
+                return;
+            }
 
             if(context.Auctions.Any())
             {

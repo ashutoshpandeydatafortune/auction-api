@@ -41,11 +41,12 @@ var app = builder.Build();
 
 try
 {
+    Console.WriteLine("Setting up search database");
     await DBInitializer.InitDb(app);
 }
 catch(Exception ex)
 {
-    Console.WriteLine("Cannot initialize seed data: " + ex.Message);
+    Console.WriteLine("Cannot setup search database: " + ex.Message);
 }
 
 // Configure the HTTP request pipeline.
