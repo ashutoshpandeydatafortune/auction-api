@@ -28,7 +28,7 @@ namespace AuctionService.Controllers
         [HttpGet]
         public async Task<ActionResult<List<AuctionDTO>>> GetAllAuctions(string date)
         {
-
+            Console.WriteLine("Date = " + date);
             var query = _context.Auctions.OrderBy(x => x.Item.Make).AsQueryable();
 
             if(!string.IsNullOrEmpty(date))
@@ -36,7 +36,9 @@ namespace AuctionService.Controllers
                 query = query.Where(x => x.UpdatedAt.CompareTo(DateTime.Parse(date).ToUniversalTime()) > 0);
             }
 
-            return await query.ProjectTo<AuctionDTO>(_mapper.ConfigurationProvider).ToListAsync();
+            var result = await query.ProjectTo<AuctionDTO>(_mapper.ConfigurationProvider).ToListAsync();
+            Console.WriteLine("Size = " + result.Count);
+            return result;
         }
 
         [HttpGet("{id}")]
