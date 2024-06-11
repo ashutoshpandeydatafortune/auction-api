@@ -10,10 +10,12 @@ namespace AuctionService.Mappers
         public MappingProfiles()
         {
             CreateMap<Item, AuctionDTO>();
+            CreateMap<AuctionDTO, Item>();
             CreateMap<CreateAuctionDTO, Item>();
             CreateMap<AuctionDTO, AuctionCreated>();
             CreateMap<Auction, AuctionDTO>().IncludeMembers(x => x.Item);
-            CreateMap<CreateAuctionDTO, Auction>().ForMember(d => d.Item, o => o.MapFrom(s => s));
+            CreateMap<AuctionDTO, Auction>().ForMember(dest => dest.Item, opt => opt.MapFrom(src => src));
+            CreateMap<CreateAuctionDTO, Auction>().ForMember(dest => dest.Item, opt => opt.MapFrom(src => src));
         }
     }
 }
