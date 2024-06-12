@@ -39,6 +39,8 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.MapControllers();
+
 try
 {
     Console.WriteLine("Setting up search database");
