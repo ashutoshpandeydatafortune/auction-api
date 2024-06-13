@@ -48,7 +48,7 @@ try
 }
 catch(Exception ex)
 {
-    Console.WriteLine("Cannot setup search database: " + ex.Message);
+    Console.WriteLine("------------------------------------ Cannot setup search database: " + ex.Message);
 }
 
 // Configure the HTTP request pipeline.

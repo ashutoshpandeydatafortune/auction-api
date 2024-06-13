@@ -37,7 +37,7 @@ namespace AuctionService.DB.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Year = table.Column<int>(type: "integer", nullable: false),
-                    Milleage = table.Column<int>(type: "integer", nullable: false),
+                    Mileage = table.Column<int>(type: "integer", nullable: false),
                     Make = table.Column<string>(type: "text", nullable: false),
                     Model = table.Column<string>(type: "text", nullable: false),
                     Color = table.Column<string>(type: "text", nullable: false),
