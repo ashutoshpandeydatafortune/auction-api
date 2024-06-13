@@ -83,7 +83,7 @@ namespace AuctionService.Controllers
             auction.Item.Year = auctionDTO.Year ?? auction.Item.Year;
             auction.Item.Model = auctionDTO.Model ?? auction.Item.Model;
             auction.Item.Color = auctionDTO.Color ?? auction.Item.Color;
-            auction.Item.Milleage = auctionDTO.Milleage ?? auction.Item.Milleage;
+            auction.Item.Mileage = auctionDTO.Milleage ?? auction.Item.Mileage;
 
             var updated = await _context.SaveChangesAsync() > 0;
 

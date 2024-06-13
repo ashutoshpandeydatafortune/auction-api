@@ -7,7 +7,7 @@ namespace AuctionService.Entities
     {
         public Guid Id { get; set; }
         public int? Year {  get; set; }  
-        public int? Milleage { get; set; }
+        public int? Mileage { get; set; }
 
         public string Make { get; set; } = string.Empty;
         public string Model { get; set; } = string.Empty;
