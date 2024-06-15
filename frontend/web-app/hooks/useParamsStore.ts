@@ -3,7 +3,7 @@ import { create } from "zustand"
 type State = {
     pageSize: number
     pageCount: number
-    pageNumber: number
+    pageNumber: number,
     searchTerm: string
 }
 
