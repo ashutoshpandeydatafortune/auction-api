@@ -4,7 +4,7 @@ import React from 'react'
 
 type Props = {
     title: string
-    subTitle: string
+    subTitle?: string
     center?: boolean
 };
 
@@ -14,9 +14,13 @@ export default function Heading({ title, subTitle, center }: Props) {
             <div className="text-2xl font-bold">
                 {title}
             </div>
-            <div className="font-light text-neutral-500 mt-2">
-                {subTitle}
-            </div>
+            {subTitle ? (
+                <div className="font-light text-neutral-500 mt-2">
+                    {subTitle}
+                </div>
+            ) : (
+                <></>
+            )}
         </div>
     );
 }

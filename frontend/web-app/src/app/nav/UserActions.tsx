@@ -2,11 +2,11 @@
 
 import { Dropdown } from 'flowbite-react'
 import { User } from 'next-auth'
-import { signOut } from 'next-auth/react'
-import Link from 'next/link'
-import React from 'react'
-import { AiFillCar, AiFillTrophy, AiOutlineLogout } from 'react-icons/ai'
-import { HiCog, HiUser } from 'react-icons/hi'
+import React from 'react';
+import Link from 'next/link';
+import { signOut } from 'next-auth/react';
+import { HiCog, HiUser } from 'react-icons/hi';
+import { AiFillCar, AiFillTrophy, AiOutlineLogout } from 'react-icons/ai';
 
 type Props = {
     user: Partial<User>
