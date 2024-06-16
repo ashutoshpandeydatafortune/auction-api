@@ -164,6 +164,3 @@ bld/
 [Oo]bj/
 [Ll]ogs/
 
-
-# Ignore node_modules in frontend/web-app
-frontend/web-app/node_modules/

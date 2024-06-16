@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import Filters from "./Filters";
 import AuctionCard from "./AuctionCard";
 import { getData } from "../actions/auctionActions";
+import EmptyFilter from "../components/EmptyFilter";
 import { Auction, PagedResult } from "../../../types";
 import AppPagination from "../components/AppPagination";
 import { useParamsStore } from "../../../hooks/useParamsStore";
@@ -14,6 +15,7 @@ import { useParamsStore } from "../../../hooks/useParamsStore";
 export default function Listings() {
     const [data, setData] = useState<PagedResult<Auction>>();
     const params = useParamsStore((state: any) => ({
+        orderBy: state.orderBy,
         pageSize: state.pageSize,
         pageNumber: state.pageNumber,
         searchTerm: state.searchTerm
@@ -39,16 +41,23 @@ export default function Listings() {
     return (
         <>
             <Filters filterSizes={[4, 8, 12]} />
-            <div className="grid grid-cols-4 gap-6">
-                {data.results && data.results.map((auction: any) => {
-                    return (
-                        <AuctionCard auction={auction} key={auction.id} />
-                    )
-                })}
-            </div>
-            <div className="flex justify-center mt-4">
-                <AppPagination pageChanged={setPageNumber} currentPage={params.pageNumber} pageCount={data.pageCount} />
-            </div>
+            {data.totalCount == 0 ? (
+                <EmptyFilter showReset />
+            ) : (
+                <>
+                    <div className="grid grid-cols-4 gap-6">
+                        {data.results && data.results.map((auction: any) => {
+                            return (
+                                <AuctionCard auction={auction} key={auction.id} />
+                            )
+                        })}
+                    </div >
+                    <div className="flex justify-center mt-4">
+                        <AppPagination pageChanged={setPageNumber} currentPage={params.pageNumber} pageCount={data.pageCount} />
+                    </div>
+                </>
+            )
+            }
         </>
     )
 }
