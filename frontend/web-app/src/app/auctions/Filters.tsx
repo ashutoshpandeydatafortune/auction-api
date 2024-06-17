@@ -52,7 +52,7 @@ export default function Filters({ filterSizes }: Props) {
     const setParams = useParamsStore(state => state.setParams);
 
     return (
-        <div className='flex justify-between items-center mb-4'>
+        <div className='flex justify-between items-center m-2 mb-4'>
             <div>
                 <span className='uppercase text-sm text-gray-500 m4-2'>Filter by: </span>
                 <Button.Group>
@@ -65,7 +65,7 @@ export default function Filters({ filterSizes }: Props) {
                             <Icon className='mr-3 h-4 w-4' />
                             {label}
                         </Button>
-                    ))};
+                    ))}
                 </Button.Group>
             </div>
             <div>
@@ -80,7 +80,7 @@ export default function Filters({ filterSizes }: Props) {
                             <Icon className='mr-3 h-4 w-4' />
                             {label}
                         </Button>
-                    ))};
+                    ))}
                 </Button.Group>
             </div>
             <div>

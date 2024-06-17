@@ -35,11 +35,11 @@ export default function Listings() {
     }, [url]);
 
     if (!data) {
-        return <h3>Loading...</h3>
+        return <h3 className="px-4">Loading...</h3>
     }
 
     return (
-        <>
+        <div className="px-4">
             <Filters filterSizes={[4, 8, 12]} />
             {data.totalCount == 0 ? (
                 <EmptyFilter showReset />
@@ -58,6 +58,6 @@ export default function Listings() {
                 </>
             )
             }
-        </>
+        </div>
     )
 }
