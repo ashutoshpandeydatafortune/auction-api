@@ -1,7 +1,9 @@
 import { create } from "zustand"
 
 type State = {
+    seller?: string
     orderBy: string
+    winner?: string
     filterBy: string
     pageSize: number
     pageCount: number
@@ -25,6 +27,9 @@ const initialState: State = {
     filterBy: '',
     searchTerm: '',
     searchValue: 'make',
+
+    seller: undefined,
+    winner: undefined
 }
 
 export const useParamsStore = create<State & Actions>()((set) => ({

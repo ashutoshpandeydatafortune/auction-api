@@ -15,6 +15,8 @@ import { useParamsStore } from "../../../hooks/useParamsStore";
 export default function Listings() {
     const [data, setData] = useState<PagedResult<Auction>>();
     const params = useParamsStore((state: any) => ({
+        seller: state.seller,
+        winner: state.winner,
         orderBy: state.orderBy,
         pageSize: state.pageSize,
         pageNumber: state.pageNumber,
