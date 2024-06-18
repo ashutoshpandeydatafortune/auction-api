@@ -16,7 +16,7 @@ async function get(url: string) {
 async function post(url: string, body: {}) {
     const requestOptions = {
         method: 'POST',
-        headers: {},
+        headers: await getHeaders(),
         body: JSON.stringify(body)
     }
 
@@ -25,20 +25,23 @@ async function post(url: string, body: {}) {
 }
 
 async function put(url: string, body: {}) {
+    console.log(url);
+    console.log(body);
     const requestOptions = {
         method: 'PUT',
-        headers: {},
+        headers: await getHeaders(),
         body: JSON.stringify(body)
     }
 
     const response = await fetch(baseUrl + url, requestOptions);
+    console.log(response);
     return await handleResponse(response);
 }
 
 async function del(url: string) {
     const requestOptions = {
         method: 'DELETE',
-        headers: {}
+        headers: await getHeaders()
     }
 
     const response = await fetch(baseUrl + url, requestOptions);

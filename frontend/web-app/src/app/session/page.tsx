@@ -1,9 +1,8 @@
 import React from 'react';
-import { getSession } from 'next-auth/react';
 
 import AuthTest from './AuthTest';
 import Heading from '../components/Heading';
-import { getTokenWorkAround } from '../actions/authActions';
+import { getSession, getTokenWorkAround } from '../actions/authActions';
 
 export default async function Session() {
     const session = await getSession();

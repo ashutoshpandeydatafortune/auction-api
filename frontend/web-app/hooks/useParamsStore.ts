@@ -26,7 +26,7 @@ const initialState: State = {
     orderBy: '',
     filterBy: '',
     searchTerm: '',
-    searchValue: 'make',
+    searchValue: '',
 
     seller: undefined,
     winner: undefined

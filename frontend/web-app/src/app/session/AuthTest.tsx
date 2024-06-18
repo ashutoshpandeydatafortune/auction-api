@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Button } from 'flowbite-react';
-import { UpdateAuctionTest } from '../actions/auctionActions';
+import { updateAuctionTest } from '../actions/auctionActions';
 
 export default function AuthTest() {
     const [loading, setLoading] = useState(false);
@@ -11,7 +11,8 @@ export default function AuthTest() {
     function doUpdate() {
         setResult(undefined);
         setLoading(true);
-        UpdateAuctionTest()
+
+        updateAuctionTest()
             .then((res: any) => setResult(res))
             .finally(() => setLoading(false));
     }
