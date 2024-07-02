@@ -25,8 +25,6 @@ async function post(url: string, body: {}) {
 }
 
 async function put(url: string, body: {}) {
-    console.log(url);
-    console.log(body);
     const requestOptions = {
         method: 'PUT',
         headers: await getHeaders(),
@@ -34,7 +32,6 @@ async function put(url: string, body: {}) {
     }
 
     const response = await fetch(baseUrl + url, requestOptions);
-    console.log(response);
     return await handleResponse(response);
 }
 
@@ -61,6 +58,7 @@ async function getHeaders() {
 
 async function handleResponse(response: Response) {
     const text = await response.text();
+    console.log(text);
     const data = text && JSON.parse(text);
 
     if (response.ok) {

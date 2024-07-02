@@ -1,14 +1,16 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { Button, TextInput } from 'flowbite-react';
+import { Button } from 'flowbite-react';
 import { FieldValues, useForm } from 'react-hook-form'
 import Input from '../components/Input';
 import DateInput from '../components/DateInput';
+import { createAuction } from '../actions/auctionActions';
+import router from 'next/router';
 
 export default function AuctionForm() {
     const { control, handleSubmit, setFocus,
-        formState: { isSubmitting, isValid, isDirty, errors } } = useForm({
+        formState: { isSubmitting, isValid } } = useForm({
             mode: 'onTouched'
         });
 
@@ -16,8 +18,18 @@ export default function AuctionForm() {
         setFocus('make');
     }, [setFocus])
 
-    function onSubmit(data: FieldValues) {
+    async function onSubmit(data: FieldValues) {
+        try {
+            const res = await createAuction(data);
+            if (res.error) {
+                throw new Error(res.error);
+            }
 
+            router.push(`/auctions/details/${res.id}`)
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 
     return (
@@ -25,6 +37,7 @@ export default function AuctionForm() {
             <div className='mb-3 block'>
                 <Input label='Make' name='make' control={control} rules={{ required: 'Make is required' }} />
                 <Input label='Model' name='model' control={control} rules={{ required: 'Model is required' }} />
+                <Input label='Color' name='color' control={control} rules={{ required: 'Color is required' }} />
 
                 <div className='grid grid-cols-2 gap-3'>
                     <Input label='Year' name='year' control={control} type='number' rules={{ required: 'Year is required' }} />
@@ -49,6 +62,7 @@ export default function AuctionForm() {
                     <Button outline color='gray'>Cancel</Button>
                     <Button
                         type='submit'
+                        disabled={!isValid}
                         isProcessing={isSubmitting}
                         outline color='success'>Submit</Button>
                 </div>

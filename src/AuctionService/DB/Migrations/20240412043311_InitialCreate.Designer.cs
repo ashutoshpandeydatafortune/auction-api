@@ -86,7 +86,7 @@ namespace AuctionService.DB.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Milleage")
+                    b.Property<int>("Mileage")
                         .HasColumnType("integer");
 
                     b.Property<string>("Model")

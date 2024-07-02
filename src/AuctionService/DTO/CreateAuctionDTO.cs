@@ -7,7 +7,7 @@ namespace AuctionService.DTO
         [Required]
         public int Year { get; set; }
         [Required]
-        public int Milleage { get; set; }
+        public int Mileage { get; set; }
         [Required]
         public int ReservePrice { get; set; }
 

@@ -2,11 +2,15 @@
 
 import { Auction, PagedResult } from "../../../types";
 import { fetchWrapper } from "../../../lib/fetchWrapper";
+import { FieldValues } from "react-hook-form";
 
 export async function getData(query: string): Promise<PagedResult<Auction>> {
     return await fetchWrapper.get(`search${query}`);
 }
 
+export async function createAuction(data: FieldValues) {
+    return await fetchWrapper.post(`auctions`, data);
+}
 export async function updateAuctionTest() {
     const data = {
         mileage: Math.floor(Math.random() * 100000) + 1

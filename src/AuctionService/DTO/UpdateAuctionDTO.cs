@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace AuctionService.DTO
+﻿namespace AuctionService.DTO
 {
     public class UpdateAuctionDTO
     {
         public int? Year { get; set; }
-        public int? Milleage { get; set; }
-        public int ReservePrice { get; set; }
+        public int? Mileage { get; set; }
+        public int? ReservePrice { get; set; }
 
         public string? Make { get; set; }
         public string? Model { get; set; }
