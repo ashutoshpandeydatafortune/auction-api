@@ -45,7 +45,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await DB.InitAsync("BidDb", MongoClientSettings.FromConnectionString("DefaultConnection"));
+await DB.InitAsync("BidDb", MongoClientSettings.FromConnectionString(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 app.Run();
 
