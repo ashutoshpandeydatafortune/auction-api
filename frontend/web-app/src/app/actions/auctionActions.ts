@@ -11,6 +11,19 @@ export async function getData(query: string): Promise<PagedResult<Auction>> {
 export async function createAuction(data: FieldValues) {
     return await fetchWrapper.post(`auctions`, data);
 }
+
+export async function getAuctionDetail(id: string): Promise<Auction> {
+    return await fetchWrapper.get(`auctions/${id}`);
+}
+
+export async function updateAuction(id: string, data: FieldValues) {
+    return await fetchWrapper.put(`auctions/${id}`, data);
+}
+
+export async function deleteAuction(id: string) {
+    return await fetchWrapper.del(`auctions/${id}`);
+}
+
 export async function updateAuctionTest() {
     const data = {
         mileage: Math.floor(Math.random() * 100000) + 1

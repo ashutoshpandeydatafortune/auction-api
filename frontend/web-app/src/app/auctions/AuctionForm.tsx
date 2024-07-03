@@ -5,30 +5,56 @@ import { Button } from 'flowbite-react';
 import { FieldValues, useForm } from 'react-hook-form'
 import Input from '../components/Input';
 import DateInput from '../components/DateInput';
-import { createAuction } from '../actions/auctionActions';
-import router from 'next/router';
+import { createAuction, updateAuction } from '../actions/auctionActions';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import { Auction } from '../../../types';
+import { usePathname } from 'next/navigation';
 
-export default function AuctionForm() {
-    const { control, handleSubmit, setFocus,
+type Props = {
+    auction?: Auction
+}
+
+export default function AuctionForm({ auction }: Props) {
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const { control, handleSubmit, setFocus, reset,
         formState: { isSubmitting, isValid } } = useForm({
             mode: 'onTouched'
         });
 
     useEffect(() => {
+        if (auction) {
+            const { make, model, color, mileage, year } = auction;
+            reset({ make, model, color, mileage, year });
+        }
+
         setFocus('make');
     }, [setFocus])
 
     async function onSubmit(data: FieldValues) {
         try {
-            const res = await createAuction(data);
+            let res;
+            let id = '';
+            if (pathname === '/auctions/create') {
+                const res = await createAuction(data);
+                id = res.id;
+            } else {
+                if (auction) {
+                    res = await updateAuction(auction.id, data);
+                    id = auction.id;
+                }
+            }
+
             if (res.error) {
                 throw new Error(res.error);
             }
 
-            router.push(`/auctions/details/${res.id}`)
+            router.push(`/auctions/details/${id}`)
         }
-        catch (error) {
-            console.log(error);
+        catch (error: any) {
+            toast.error(error.message);
         }
     }
 
@@ -44,20 +70,23 @@ export default function AuctionForm() {
                     <Input label='Mileage' name='mileage' control={control} rules={{ required: 'Mileage is required' }} />
                 </div>
 
-                <Input label='Image URL' name='imageUrl' control={control} rules={{ required: 'Image URL is required' }} />
+                {pathname === '/auctions/create' &&
+                    <>
+                        <Input label='Image URL' name='imageUrl' control={control} rules={{ required: 'Image URL is required' }} />
 
-                <div className='grid grid-cols-2 gap-3'>
-                    <Input label='Reserve Price (enter 0 if no reserve)' name='reservePrice' type='number' control={control} rules={{ required: 'Reserve price is required' }} />
-                    <DateInput
-                        label='Auction end date/time'
-                        name='auctionEnd'
-                        control={control}
-                        dateFormat='dd MMM yyyy h:mm a'
-                        showTimeSelect
-                        rules={{ required: 'Auctoin end date is required' }}
-                    />
-                </div>
-
+                        <div className='grid grid-cols-2 gap-3'>
+                            <Input label='Reserve Price (enter 0 if no reserve)' name='reservePrice' type='number' control={control} rules={{ required: 'Reserve price is required' }} />
+                            <DateInput
+                                label='Auction end date/time'
+                                name='auctionEnd'
+                                control={control}
+                                dateFormat='dd MMM yyyy h:mm a'
+                                showTimeSelect
+                                rules={{ required: 'Auctoin end date is required' }}
+                            />
+                        </div>
+                    </>
+                }
                 <div className='flex justify-between'>
                     <Button outline color='gray'>Cancel</Button>
                     <Button

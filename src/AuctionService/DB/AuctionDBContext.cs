@@ -9,8 +9,8 @@ namespace AuctionService.DB
         {
         }
 
-        public DbSet<Auction> Auctions { get; set; }
         public DbSet<Item> Items { get; set; }
+        public DbSet<Auction> Auctions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,6 +22,8 @@ namespace AuctionService.DB
             base.OnModelCreating(modelBuilder);
         }
 
+        // Uncomment this to enable logging
+        /*
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
@@ -29,5 +31,6 @@ namespace AuctionService.DB
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors();
         }
+        */
     }
 }
