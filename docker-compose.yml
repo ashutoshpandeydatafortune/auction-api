@@ -4,9 +4,9 @@ services:
   postgres:
     image: postgres:latest  # Use the latest official PostgreSQL image
     environment:
-      POSTGRES_USER: postgres         # Sets the superuser name
-      POSTGRES_PASSWORD: postgres123  # Sets the superuser password
-      POSTGRES_DB: auctionsdb         # Sets the default database to be created
+      - POSTGRES_USER=postgres         # Sets the superuser name
+      - POSTGRES_PASSWORD=postgres123  # Sets the superuser password
+      - POSTGRES_DB=auctionsdb         # Sets the default database to be created
     ports:
       - "5433:5432"  # Maps port 5432 of the container to port 543 on the host
     volumes:
@@ -20,8 +20,8 @@ services:
   mongodb:
     image: mongo:latest
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: mongo123
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=mongo123
     ports:
       - 27018:27017  # already mongo running on local 
     volumes:
@@ -48,16 +48,16 @@ services:
       context: .
       dockerfile: src/AuctionService/Dockerfile
     environment:
-      - ASPNETCORE_ENVIRONMENT = Development
-      - ASPNETCORE_URLS = http://+:80
-      - ASPNETCORE_URLS = http://+:7777
-      - RabbitMq__Host = rabbitmq
-      - ConnectionStrings__DefaultConnection = Server=postgres:5432;User Id=postgres;Password=postgres123;Database=auctionsdb;
-      - IdentityServiceUrl = http://identity-svc
-      - Kestrel__Endpoints__Grpc__Protocols = Http2
-      - Kestrel__Endpoints__Grpc__Url = http://+:7777
-      - Kestrel__Endpoints__WebApi__Protocols = Http1
-      - Kestrel__Endpoints__WebApi__Url = http://+:80
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_URLS=http://+:7777
+      - RabbitMq__Host=rabbitmq
+      - ConnectionStrings__DefaultConnection=Server=postgres:5432;User Id=postgres;Password=postgres123;Database=auctionsdb;
+      - IdentityServiceUrl=http://identity-svc
+      - Kestrel__Endpoints__Grpc__Protocols=Http2
+      - Kestrel__Endpoints__Grpc__Url=http://+:7777
+      - Kestrel__Endpoints__WebApi__Protocols=Http1
+      - Kestrel__Endpoints__WebApi__Url=http://+:80
     ports:
       - 7001:80
       - 7777:7777
@@ -73,11 +73,11 @@ services:
       context: .
       dockerfile: src/SearchService/Dockerfile
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://+:80
-      RabbitMq__Host: rabbitmq
-      ConnectionStrings__DefaultConnection: mongodb://root:mongo123@mongodb:27017/auctionsdb?authSource=admin
-      AuctionServiceUrl: http://auction-svc
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - RabbitMq__Host=rabbitmq
+      - ConnectionStrings__DefaultConnection=mongodb://root:mongo123@mongodb:27017/auctionsdb?authSource=admin
+      - AuctionServiceUrl=http://auction-svc
     ports:
       - 7002:80
     depends_on:
@@ -90,12 +90,12 @@ services:
       context: .
       dockerfile: src/BiddingService/Dockerfile
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://+:80
-      RabbitMq__Host: rabbitmq
-      ConnectionStrings__DefaultConnection: mongodb://root:mongo123@mongodb:27017/auctionsdb?authSource=admin
-      IdentityServiceUrl: http://identity-svc
-      GrpcAuction: http://auction-svc:7777
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - RabbitMq__Host=rabbitmq
+      - ConnectionStrings__DefaultConnection=mongodb://root:mongo123@mongodb:27017/auctionsdb?authSource=admin
+      - IdentityServiceUrl=http://identity-svc
+      - GrpcAuction=http://auction-svc:7777
     ports:
       - 7003:80
     depends_on:
@@ -108,9 +108,9 @@ services:
       context: .
       dockerfile: src/IdentityService/Dockerfile
     environment:
-      ASPNETCORE_ENVIRONMENT: Docker
-      ASPNETCORE_URLS: http://+:80
-      ConnectionStrings__DefaultConnection: Server=postgres:5432;User Id=postgres;Password=postgres123;Database=auctionsdb;
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=postgres:5432;User Id=postgres;Password=postgres123;Database=auctionsdb;
     ports:
       - 5000:80
     depends_on:
@@ -123,11 +123,8 @@ services:
       context: .
       dockerfile: src/GatewayService/Dockerfile
     environment:
-      ASPNETCORE_ENVIRONMENT: Docker
-      ASPNETCORE_URLS: http://+:80
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
     ports:
       - 6001:80
-    depends_on:
-      postgres:
-        condition: service_healthy
   
