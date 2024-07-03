@@ -1,4 +1,5 @@
 ﻿using AuctionService.Entities;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuctionService.DB
@@ -14,12 +15,16 @@ namespace AuctionService.DB
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Auction>()
                 .HasOne(a => a.Item)
                 .WithOne(i => i.Auction)
                 .HasForeignKey<Item>(i => i.AuctionId);
 
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.AddInboxStateEntity();
+            modelBuilder.AddOutboxMessageEntity();
+            modelBuilder.AddOutboxStateEntity();
         }
 
         // Uncomment this to enable logging
