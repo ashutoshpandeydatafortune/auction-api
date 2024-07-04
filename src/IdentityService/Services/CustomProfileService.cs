@@ -19,7 +19,6 @@ namespace IdentityService.Services
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             var user = await _userManager.GetUserAsync(context.Subject);
-
             var existingClaims = await _userManager.GetClaimsAsync(user);
 
             var claims = new List<Claim>
@@ -28,12 +27,12 @@ namespace IdentityService.Services
             };
 
             context.IssuedClaims.AddRange(claims);
-
             context.IssuedClaims.Add(existingClaims.First(x => x.Type == JwtClaimTypes.Name));
         }
 
-        public async Task IsActiveAsync(IsActiveContext context)
-        {            
+        public Task IsActiveAsync(IsActiveContext context)
+        {
+            return Task.CompletedTask;
         }
     }
 }

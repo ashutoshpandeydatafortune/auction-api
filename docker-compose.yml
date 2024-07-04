@@ -36,11 +36,6 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
-    healthcheck:
-      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
-      interval: 5s
-      timeout: 15s
-      retries: 2
 
   auction-svc:
     image: ashutoshpandey/auction-svc:latest
@@ -62,10 +57,8 @@ services:
       - 7001:80
       - 7777:7777
     depends_on:
-      postgres:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+      - postgres
+      - rabbitmq
 
   search-svc:
     image: ashutoshpandey/search-svc:latest
@@ -99,8 +92,8 @@ services:
     ports:
       - 7003:80
     depends_on:
-      - mongo
       - rabbitmq
+      - mongo
 
   identity-svc:
     image: ashutoshpandey/identity-svc:latest
@@ -127,4 +120,18 @@ services:
       - ASPNETCORE_URLS=http://+:80
     ports:
       - 6001:80
+
+  notification-svc:
+    image: ashutoshpandey/notification-svc:latest
+    build:
+      context: .
+      dockerfile: src/NotificationService/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - RabbitMq__Host=rabbitmq
+    ports:
+      - 7004:80
+    depends_on:
+      - rabbitmq
   

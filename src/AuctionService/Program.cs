@@ -3,19 +3,20 @@ using AuctionService.DB;
 using AuctionService.DB.Seeders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using AuctionService;
 using AuctionService.Services;
 using AuctionService.Repositories;
 using AuctionService.Consumers;
+using Npgsql;
+using Polly;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<AuctionDBContext>(opt =>
 {
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddMassTransit(x =>
 {
@@ -32,21 +33,21 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseMessageRetry(r =>
+       {
+           r.Handle<RabbitMqConnectionException>();
+           r.Interval(5, TimeSpan.FromSeconds(10));
+       });
+
         cfg.Host(builder.Configuration["RabbitMq:Host"], "/", host =>
         {
             host.Username(builder.Configuration.GetValue("RabbitMq:Username", "guest"));
-            host.Username(builder.Configuration.GetValue("RabbitMq:Password", "guest"));
+            host.Password(builder.Configuration.GetValue("RabbitMq:Password", "guest"));
         });
 
         cfg.ConfigureEndpoints(context);
     });
 });
-
-
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -62,13 +63,6 @@ builder.Services.AddGrpc();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 //app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -77,11 +71,15 @@ app.MapGrpcService<GrpcAuctionService>();
 
 try
 {
-    DBInitializer.InitDb(app);
+    var retryPolicy = Policy
+    .Handle<NpgsqlException>()
+    .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(10));
+
+    retryPolicy.ExecuteAndCapture(() => DBInitializer.InitDb(app));
 }
-catch(Exception ex)
+catch (Exception ex)
 {
-    Console.WriteLine("Cannot initialize seed: " + ex.Message);
+    Console.WriteLine("Cannot initialize auction seed: " + ex.Message);
 }
 
 app.Run();

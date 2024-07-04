@@ -20,9 +20,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "src\Contracts\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GatewayService", "src\GatewayService\GatewayService.csproj", "{39208F32-8E68-4CD2-AE8E-3682E78C4908}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService", "src\IdentityService\IdentityService.csproj", "{ABD6DAE5-A11E-4F79-8260-BD90B08586B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService", "src\IdentityService\IdentityService.csproj", "{ABD6DAE5-A11E-4F79-8260-BD90B08586B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiddingService", "src\BiddingService\BiddingService.csproj", "{CE1801D1-E0A2-4704-94C9-8F83E37DB591}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BiddingService", "src\BiddingService\BiddingService.csproj", "{CE1801D1-E0A2-4704-94C9-8F83E37DB591}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationService", "src\NotificationService\NotificationService.csproj", "{50A32884-4CEF-402E-B532-97021A0DCA5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +56,10 @@ Global
 		{CE1801D1-E0A2-4704-94C9-8F83E37DB591}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE1801D1-E0A2-4704-94C9-8F83E37DB591}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE1801D1-E0A2-4704-94C9-8F83E37DB591}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50A32884-4CEF-402E-B532-97021A0DCA5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50A32884-4CEF-402E-B532-97021A0DCA5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50A32884-4CEF-402E-B532-97021A0DCA5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50A32884-4CEF-402E-B532-97021A0DCA5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +71,7 @@ Global
 		{39208F32-8E68-4CD2-AE8E-3682E78C4908} = {7057FD09-92A4-4A77-A87A-B91C4E586CB8}
 		{ABD6DAE5-A11E-4F79-8260-BD90B08586B4} = {7057FD09-92A4-4A77-A87A-B91C4E586CB8}
 		{CE1801D1-E0A2-4704-94C9-8F83E37DB591} = {7057FD09-92A4-4A77-A87A-B91C4E586CB8}
+		{50A32884-4CEF-402E-B532-97021A0DCA5F} = {7057FD09-92A4-4A77-A87A-B91C4E586CB8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7FB77742-52D6-45FD-B973-384D7A71E2FE}

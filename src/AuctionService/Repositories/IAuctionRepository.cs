@@ -1,13 +1,15 @@
-﻿using AuctionService.Entities;
+﻿using AuctionService.DTO;
+using AuctionService.Entities;
 
 namespace AuctionService.Repositories
 {
     public interface IAuctionRepository
     {
-        Task<Auction> GetAuctionByIdAsync(Guid id);
-        Task<IEnumerable<Auction>> GetAllAuctionsAsync();
-        Task AddAuctionAsync(Auction auction);
-        Task UpdateAuctionAsync(Auction auction);
-        Task DeleteAuctionAsync(Guid id);
+        Task<bool> SaveChangesAsync();
+        void AddAuction(Auction auction);
+        void RemoveAuction(Auction auction);
+        Task<Auction> GetAuctionEntityById(Guid id);
+        Task<AuctionDTO> GetAuctionByIdAsync(Guid id);
+        Task<List<AuctionDTO>> GetAuctionsAsync(string date);
     }
 }

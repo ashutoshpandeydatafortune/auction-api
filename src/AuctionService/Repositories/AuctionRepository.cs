@@ -1,48 +1,62 @@
 ﻿using AuctionService.DB;
+using AuctionService.DTO;
 using AuctionService.Entities;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuctionService.Repositories
 {
     public class AuctionRepository : IAuctionRepository
     {
+        private readonly IMapper _mapper;
         private readonly AuctionDBContext _context;
 
-        public AuctionRepository(AuctionDBContext context)
+        public AuctionRepository(AuctionDBContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<Auction> GetAuctionByIdAsync(Guid id)
+        public void AddAuction(Auction auction)
         {
-            return await _context.Auctions.Include(a => a.Item).FirstOrDefaultAsync(a => a.Id == id);
+            _context.Auctions.Add(auction);
         }
 
-        public async Task<IEnumerable<Auction>> GetAllAuctionsAsync()
+        public async Task<AuctionDTO> GetAuctionByIdAsync(Guid id)
         {
-            return await _context.Auctions.Include(a => a.Item).ToListAsync();
+            return await _context.Auctions
+                .ProjectTo<AuctionDTO>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task AddAuctionAsync(Auction auction)
+        public async Task<Auction> GetAuctionEntityById(Guid id)
         {
-            await _context.Auctions.AddAsync(auction);
-            await _context.SaveChangesAsync();
+            return await _context.Auctions
+                .Include(x => x.Item)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task UpdateAuctionAsync(Auction auction)
+        public async Task<List<AuctionDTO>> GetAuctionsAsync(string date)
         {
-            _context.Auctions.Update(auction);
-            await _context.SaveChangesAsync();
-        }
+            var query = _context.Auctions.OrderBy(x => x.Item.Make).AsQueryable();
 
-        public async Task DeleteAuctionAsync(Guid id)
-        {
-            var auction = await GetAuctionByIdAsync(id);
-            if (auction != null)
+            if (!string.IsNullOrEmpty(date))
             {
-                _context.Auctions.Remove(auction);
-                await _context.SaveChangesAsync();
+                query = query.Where(x => x.UpdatedAt.CompareTo(DateTime.Parse(date).ToUniversalTime()) > 0);
             }
+
+            return await query.ProjectTo<AuctionDTO>(_mapper.ConfigurationProvider).ToListAsync();
+        }
+
+        public void RemoveAuction(Auction auction)
+        {
+            _context.Auctions.Remove(auction);
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
