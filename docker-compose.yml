@@ -140,6 +140,8 @@ services:
     build:
       context: .
       dockerfile: frontend/web-app/Dockerfile
+    ports:
+      - 3000:3000
     environment:
       - NEXTAUTH_SECRET=somethingreallyreallysecret
       - NEXTAUTH_URL=http://web-app
