@@ -2,11 +2,11 @@ import React from 'react';
 
 import AuthTest from './AuthTest';
 import Heading from '../components/Heading';
-import { getSession, getTokenWorkAround } from '../actions/authActions';
+import { getSession, getTokenWorkaround } from '../actions/authActions';
 
 export default async function Session() {
     const session = await getSession();
-    const token = await getTokenWorkAround();
+    const token = await getTokenWorkaround();
 
     return (
         <div className='px-4 py-4'>

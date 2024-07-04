@@ -1,7 +1,7 @@
 import React from 'react'
 
 import AuctionForm from '../AuctionForm'
-import Heading from '@/app/components/Heading'
+import Heading from 'app/components/Heading'
 
 export default function CreateAuction() {
     return (

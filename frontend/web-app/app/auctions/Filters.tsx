@@ -1,9 +1,9 @@
 import React from 'react'
 import { Button, ButtonGroup } from 'flowbite-react'
-import { useParamsStore } from '../../../hooks/useParamsStore';
 import { AiOutlineClockCircle, AiOutlineSortAscending } from 'react-icons/ai';
 import { BsFillStopCircleFill, BsStopwatchFill } from 'react-icons/bs';
 import { GiFinishLine, GiFlame } from 'react-icons/gi';
+import { useParamsStore } from 'hooks/useParamsStore';
 
 type Props = {
     filterSizes: number[];
