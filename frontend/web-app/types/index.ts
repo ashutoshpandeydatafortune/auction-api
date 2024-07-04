@@ -1,5 +1,5 @@
 export type PagedResult<T> = {
-    results: T[],
+    results: T[]
     pageCount: number
     totalCount: number
 }
@@ -7,7 +7,7 @@ export type PagedResult<T> = {
 export type Auction = {
     reservePrice: number
     seller: string
-    winner: string
+    winner?: string
     soldAmount: number
     currentHighBid: number
     createdAt: string
@@ -30,4 +30,12 @@ export type Bid = {
     bidTime: string
     amount: number
     bidStatus: string
+}
+
+export type AuctionFinished = {
+    itemSold: boolean
+    auctionId: string
+    winner?: string
+    seller: string
+    amount?: number
 }

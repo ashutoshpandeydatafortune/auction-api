@@ -20,7 +20,7 @@ export async function getCurrentUser() {
     }
 }
 
-export async function getTokenWorkAround() {
+export async function getTokenWorkaround() {
     const req = {
         headers: Object.fromEntries(headers() as Headers),
         cookies: Object.fromEntries(

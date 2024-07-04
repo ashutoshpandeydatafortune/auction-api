@@ -1,7 +1,7 @@
 import React from 'react';
 import CartImage from './CartImage';
 import CountdownTimer from './CountdownTimer';
-import { Auction } from '../../../types';
+import { Auction } from '@/types/index';
 import Link from 'next/link';
 import CurrentBid from './CurrentBid';
 

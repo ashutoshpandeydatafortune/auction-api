@@ -9,8 +9,8 @@ import AuctionCard from "./AuctionCard";
 import { getData } from "../actions/auctionActions";
 import EmptyFilter from "../components/EmptyFilter";
 import AppPagination from "../components/AppPagination";
-import { useParamsStore } from "../../../hooks/useParamsStore";
-import { useAuctionStore } from "../../../hooks/useAuctionStore";
+import { useParamsStore } from "hooks/useParamsStore";
+import { useAuctionStore } from "hooks/useAuctionStore";
 
 export default function Listings() {
     const [loading, setLoading] = useState(true);
@@ -44,7 +44,7 @@ export default function Listings() {
             setData(data);
             setLoading(false);
         })
-    }, [url]);
+    }, [url, setData]);
 
     if (loading) {
         return <h3 className="px-4">Loading...</h3>
