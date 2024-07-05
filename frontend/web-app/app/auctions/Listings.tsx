@@ -1,75 +1,70 @@
 'use client'
 
-import queryString from "query-string";
-import { shallow } from "zustand/shallow";
-import React, { useEffect, useState } from "react";
-
-import Filters from "./Filters";
-import AuctionCard from "./AuctionCard";
-import { getData } from "../actions/auctionActions";
-import EmptyFilter from "../components/EmptyFilter";
-import AppPagination from "../components/AppPagination";
-import { useParamsStore } from "hooks/useParamsStore";
-import { useAuctionStore } from "hooks/useAuctionStore";
+import React, { useEffect, useState } from 'react'
+import AuctionCard from './AuctionCard';
+import AppPagination from '../components/AppPagination';
+import { getData } from '../actions/auctionActions';
+import Filters from './Filters';
+import { useParamsStore } from 'hooks/useParamsStore';
+import { shallow } from 'zustand/shallow';
+import qs from 'query-string';
+import EmptyFilter from '../components/EmptyFilter';
+import { useAuctionStore } from 'hooks/useAuctionStore';
 
 export default function Listings() {
     const [loading, setLoading] = useState(true);
-
-    const params = useParamsStore((state: any) => ({
-        seller: state.seller,
-        winner: state.winner,
-        orderBy: state.orderBy,
-        pageSize: state.pageSize,
+    const params = useParamsStore(state => ({
         pageNumber: state.pageNumber,
-        searchTerm: state.searchTerm
-    }), shallow);
-
+        pageSize: state.pageSize,
+        searchTerm: state.searchTerm,
+        orderBy: state.orderBy,
+        filterBy: state.filterBy,
+        seller: state.seller,
+        winner: state.winner
+    }), shallow)
     const data = useAuctionStore(state => ({
         auctions: state.auctions,
-        pageCount: state.pageCount,
-        totalCount: state.totalCount
-    }));
-
+        totalCount: state.totalCount,
+        pageCount: state.pageCount
+    }), shallow);
     const setData = useAuctionStore(state => state.setData);
 
-    const setParams = useParamsStore((state: any) => state.setParams);
-    const url = queryString.stringifyUrl({ url: '', query: params });
+    const setParams = useParamsStore(state => state.setParams);
+    const url = qs.stringifyUrl({ url: '', query: params })
 
     function setPageNumber(pageNumber: number) {
-        setParams({ pageNumber });
+        setParams({ pageNumber })
     }
 
     useEffect(() => {
-        getData(url).then((data: any) => {
+        getData(url).then(data => {
             setData(data);
             setLoading(false);
         })
-    }, [url, setData]);
+    }, [url, setData])
 
-    if (loading) {
-        return <h3 className="px-4">Loading...</h3>
-    }
+    if (loading) return <h3>Loading...</h3>
 
     return (
-        <div className="px-4">
-            <Filters filterSizes={[4, 8, 12]} />
-            {data.totalCount == 0 ? (
+        <>
+            <Filters />
+            {data.totalCount === 0 ? (
                 <EmptyFilter showReset />
             ) : (
                 <>
-                    <div className="grid grid-cols-4 gap-6">
-                        {data.auctions && data.auctions.map((auction: any) => {
-                            return (
-                                <AuctionCard auction={auction} key={auction.id} />
-                            )
-                        })}
-                    </div >
-                    <div className="flex justify-center mt-4">
-                        <AppPagination pageChanged={setPageNumber} currentPage={params.pageNumber} pageCount={data.pageCount} />
+                    <div className='grid grid-cols-4 gap-6'>
+                        {data.auctions.map(auction => (
+                            <AuctionCard auction={auction} key={auction.id} />
+                        ))}
+                    </div>
+                    <div className='flex justify-center mt-4'>
+                        <AppPagination pageChanged={setPageNumber}
+                            currentPage={params.pageNumber} pageCount={data.pageCount} />
                     </div>
                 </>
-            )
-            }
-        </div>
+            )}
+
+        </>
+
     )
 }

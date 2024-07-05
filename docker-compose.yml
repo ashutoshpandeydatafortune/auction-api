@@ -8,7 +8,7 @@ services:
       - POSTGRES_PASSWORD=postgres123  # Sets the superuser password
       - POSTGRES_DB=auctionsdb         # Sets the default database to be created
     ports:
-      - "5433:5432"  # Maps port 5432 of the container to port 543 on the host
+      - "5432:5432"  # Maps port 5432 of the container to port 543 on the host
     volumes:
       - ./mylocal_pgdata:/var/lib/postgresql/data  # Bind mount for PostgreSQL data
     healthcheck:
@@ -23,10 +23,11 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=mongo123
     ports:
-      - 27018:27017  # already mongo running on local 
+      - 27017:27017  # already mongo running on local 
     volumes:
       - ./mylocal_mongodata:/var/lib/mongodb/data  # Bind mount for PostgreSQL data
     healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
       timeout: 5s
       retries: 5
@@ -36,6 +37,11 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmqctl status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   auction-svc:
     image: ashutoshpandey/auction-svc:latest
@@ -57,8 +63,10 @@ services:
       - 7001:80
       - 7777:7777
     depends_on:
-      - postgres
-      - rabbitmq
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
 
   search-svc:
     image: ashutoshpandey/search-svc:latest
@@ -74,8 +82,10 @@ services:
     ports:
       - 7002:80
     depends_on:
-      - mongo
-      - rabbitmq
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
 
   bid-svc:
     image: ashutoshpandey/bid-svc:latest
@@ -92,8 +102,10 @@ services:
     ports:
       - 7003:80
     depends_on:
-      - rabbitmq
-      - mongo
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
 
   identity-svc:
     image: ashutoshpandey/identity-svc:latest
@@ -133,18 +145,19 @@ services:
     ports:
       - 7004:80
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
 
-  web-app:
-    image: ashutoshpandey/web-app
-    build:
-      context: .
-      dockerfile: frontend/web-app/Dockerfile
-    ports:
-      - 3000:3000
-    environment:
-      - NEXTAUTH_SECRET=somethingreallyreallysecret
-      - NEXTAUTH_URL=http://web-app
-      - API_URL=http://gateway-svc/
-      - ID_URL=http://identity-svc
-      - NEXT_PUBLIC_NOTIFY_URL=http://gateway-svc/notifications
+  # web-app:
+  #   image: ashutoshpandey/web-app
+  #   build:
+  #     context: .
+  #     dockerfile: frontend/web-app/Dockerfile
+  #   ports:
+  #     - 3000:3000
+  #   environment:
+  #     - NEXTAUTH_SECRET=somethingreallyreallysecret
+  #     - NEXTAUTH_URL=http://web-app
+  #     - API_URL=http://gateway-svc/
+  #     - ID_URL=http://identity-svc
+  #     - NEXT_PUBLIC_NOTIFY_URL=http://gateway-svc/notifications

@@ -1,4 +1,4 @@
-import { Bid } from "@/types/index"
+import { Bid } from "types"
 import { create } from "zustand"
 
 type State = {

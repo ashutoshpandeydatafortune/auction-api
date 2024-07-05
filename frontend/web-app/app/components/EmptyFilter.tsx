@@ -8,7 +8,7 @@ import { useParamsStore } from 'hooks/useParamsStore';
 
 type Props = {
     title?: string
-    subTitle?: string
+    subtitle?: string
     showLogin?: boolean
     showReset?: boolean
     callbackUrl?: string
@@ -16,7 +16,7 @@ type Props = {
 
 export default function EmptyFilter({
     title = 'No matches found',
-    subTitle = 'Try changing the filter',
+    subtitle = 'Try changing the filter',
     showLogin,
     showReset,
     callbackUrl
@@ -26,7 +26,7 @@ export default function EmptyFilter({
     return (
         <div className='h-[40vh] flex flex-col gap-2 justify-center items-center shadow-lg'>
             <div className="text-2xl font-bold">
-                <Heading title={title} subTitle={subTitle} />
+                <Heading title={title} subtitle={subtitle} />
                 <div className='mt-4'>
                     {showReset && (
                         <Button outline onClick={reset}>Remove Filters</Button>

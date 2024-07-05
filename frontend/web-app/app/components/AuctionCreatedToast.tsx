@@ -1,4 +1,4 @@
-import { Auction } from '@/types/index'
+import { Auction } from 'types/index'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'

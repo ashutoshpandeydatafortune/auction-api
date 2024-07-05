@@ -1,4 +1,3 @@
-// lib/authOptions.ts
 import { NextAuthOptions } from "next-auth";
 import DuendeIdentityServer6 from 'next-auth/providers/duende-identity-server6';
 

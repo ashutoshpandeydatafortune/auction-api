@@ -1,15 +1,15 @@
 'use client'
 
-import { Auction, Bid } from '@/types/index'
 import { getBidsForAuction } from 'app/actions/auctionActions'
-import EmptyFilter from 'app/components/EmptyFilter'
 import Heading from 'app/components/Heading'
-import { numberWithCommas } from 'app/lib/numberWithComma'
 import { useBidStore } from 'hooks/useBidStore'
+import { Auction, Bid } from 'types'
 import { User } from 'next-auth'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import BidItem from './BidItem'
+import { numberWithCommas } from 'app/lib/numberWithComma'
+import EmptyFilter from 'app/components/EmptyFilter'
 import BidForm from './BidForm'
 
 type Props = {
@@ -60,7 +60,7 @@ export default function BidList({ user, auction }: Props) {
             <div className='overflow-auto h-[400px] flex flex-col-reverse px-2'>
                 {bids.length === 0 ? (
                     <EmptyFilter title='No bids for this item'
-                        subTitle='Please feel free to make a bid' />
+                        subtitle='Please feel free to make a bid' />
                 ) : (
                     <>
                         {bids.map(bid => (

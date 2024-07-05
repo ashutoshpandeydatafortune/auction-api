@@ -1,6 +1,8 @@
 'use client'
 
-import { Auction, AuctionFinished, Bid } from '@/types/index';
+import { useAuctionStore } from 'hooks/useAuctionStore';
+import { useBidStore } from 'hooks/useBidStore';
+import { Auction, AuctionFinished, Bid } from 'types';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
 import { User } from 'next-auth';
 import React, { ReactNode, useEffect, useState } from 'react'
@@ -8,8 +10,6 @@ import { toast } from 'react-hot-toast';
 import AuctionCreatedToast from '../components/AuctionCreatedToast';
 import { getDetailedViewData } from '../actions/auctionActions';
 import AuctionFinishedToast from '../components/AuctionFinishedToast';
-import { useAuctionStore } from 'hooks/useAuctionStore';
-import { useBidStore } from 'hooks/useBidStore';
 
 type Props = {
     children: ReactNode
@@ -21,7 +21,7 @@ export default function SignalRProvider({ children, user }: Props) {
     const setCurrentPrice = useAuctionStore(state => state.setCurrentPrice);
     const addBid = useBidStore(state => state.addBid);
     const apiUrl = process.env.NODE_ENV === 'production'
-        ? 'https://api.carsties.store/notifications'
+        ? 'http://localhost:7004/notifications'
         : process.env.NEXT_PUBLIC_NOTIFY_URL
 
     useEffect(() => {
@@ -67,7 +67,7 @@ export default function SignalRProvider({ children, user }: Props) {
                     })
 
 
-                }).catch((error: any) => console.log(error));
+                }).catch(error => console.log(error));
         }
 
         return () => {
