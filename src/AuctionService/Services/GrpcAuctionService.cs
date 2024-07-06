@@ -13,8 +13,8 @@ namespace AuctionService.Services
         }
 
         public override async Task<GrpcAuctionResponse> GetAuction(
-            GetAuctionRequest request,
-            ServerCallContext context)
+            GetAuctionRequest request, ServerCallContext context
+        )
         {
             Console.WriteLine("==> Received Grpc request for auction");
 

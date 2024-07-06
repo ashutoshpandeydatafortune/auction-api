@@ -1,16 +1,16 @@
-version: '3.8'  # Using Docker Compose file format version 3.8
+version: '3.8'
 
 services:
   postgres:
-    image: postgres:latest  # Use the latest official PostgreSQL image
+    image: postgres:latest
     environment:
-      - POSTGRES_USER=postgres         # Sets the superuser name
-      - POSTGRES_PASSWORD=postgres123  # Sets the superuser password
-      - POSTGRES_DB=auctionsdb         # Sets the default database to be created
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres123
+      - POSTGRES_DB=auctionsdb
     ports:
-      - "5432:5432"  # Maps port 5432 of the container to port 543 on the host
+      - "5432:5432"
     volumes:
-      - ./mylocal_pgdata:/var/lib/postgresql/data  # Bind mount for PostgreSQL data
+      - ./mylocal_pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -23,20 +23,20 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=mongo123
     ports:
-      - 27017:27017  # already mongo running on local 
+      - "27017:27017"
     volumes:
-      - ./mylocal_mongodata:/var/lib/mongodb/data  # Bind mount for PostgreSQL data
+      - ./mylocal_mongodata:/var/lib/mongodb/data
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      test: ["CMD-SHELL", "echo 'db.runCommand(\"ping\").ok' | mongosh localhost:27017/test --quiet"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   rabbitmq:
-    image: rabbitmq:3-management-alpine         # default credentials guest/guest
+    image: rabbitmq:3-management-alpine
     ports:
-      - 5672:5672
-      - 15672:15672
+      - "5672:5672"
+      - "15672:15672"
     healthcheck:
       test: ["CMD-SHELL", "rabbitmqctl status"]
       interval: 10s
@@ -60,8 +60,8 @@ services:
       - Kestrel__Endpoints__WebApi__Protocols=Http1
       - Kestrel__Endpoints__WebApi__Url=http://+:80
     ports:
-      - 7001:80
-      - 7777:7777
+      - "7001:80"
+      - "7777:7777"
     depends_on:
       postgres:
         condition: service_healthy
@@ -80,7 +80,7 @@ services:
       - ConnectionStrings__DefaultConnection=mongodb://root:mongo123@mongo:27017/auctionsdb?authSource=admin
       - AuctionServiceUrl=http://auction-svc
     ports:
-      - 7002:80
+      - "7002:80"
     depends_on:
       mongo:
         condition: service_healthy
@@ -100,7 +100,7 @@ services:
       - IdentityServiceUrl=http://identity-svc
       - GrpcAuction=http://auction-svc:7777
     ports:
-      - 7003:80
+      - "7003:80"
     depends_on:
       mongo:
         condition: service_healthy
@@ -117,7 +117,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnection=Server=postgres:5432;User Id=postgres;Password=postgres123;Database=auctionsdb;
     ports:
-      - 5000:80
+      - "5000:80"
     depends_on:
       postgres:
         condition: service_healthy
@@ -131,7 +131,10 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
     ports:
-      - 6001:80
+      - "6001:80"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 
   notification-svc:
     image: ashutoshpandey/notification-svc:latest
@@ -143,21 +146,23 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - RabbitMq__Host=rabbitmq
     ports:
-      - 7004:80
+      - "7004:80"
     depends_on:
       rabbitmq:
         condition: service_healthy
 
-  # web-app:
-  #   image: ashutoshpandey/web-app
-  #   build:
-  #     context: .
-  #     dockerfile: frontend/web-app/Dockerfile
-  #   ports:
-  #     - 3000:3000
-  #   environment:
-  #     - NEXTAUTH_SECRET=somethingreallyreallysecret
-  #     - NEXTAUTH_URL=http://web-app
-  #     - API_URL=http://gateway-svc/
-  #     - ID_URL=http://identity-svc
-  #     - NEXT_PUBLIC_NOTIFY_URL=http://gateway-svc/notifications
+  web-app:
+    image: ashutoshpandey/web-app
+    build:
+      context: .
+      dockerfile: frontend/web-app/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXTAUTH_SECRET=somethingreallyreallysecret
+      - NEXTAUTH_URL=http://localhost:3000
+      - API_URL=http://gateway-svc:6001/
+      - ID_URL=http://identity-svc:5000
+      - NEXT_PUBLIC_NOTIFY_URL=http://gateway-svc:6001/notifications
+    depends_on:
+      - identity-svc
