@@ -1,9 +1,13 @@
 import { getTokenWorkaround } from "app/actions/authActions";
 
-
 const baseUrl = process.env.API_URL;
+console.log('======================================');
+console.log(process.env);
+console.log('======================================');
 
 async function get(url: string) {
+    console.log('=======================>>>>>>>>>>>>>>' + url);
+
     const requestOptions = {
         method: 'GET',
         header: await getHeaders()
@@ -14,6 +18,8 @@ async function get(url: string) {
 }
 
 async function post(url: string, body: {}) {
+    console.log('=======================>>>>>>>>>>>>>>' + url);
+
     const requestOptions = {
         method: 'POST',
         headers: await getHeaders(),
@@ -24,6 +30,8 @@ async function post(url: string, body: {}) {
 }
 
 async function put(url: string, body: {}) {
+    console.log('=======================>>>>>>>>>>>>>>' + url);
+
     const requestOptions = {
         method: 'PUT',
         headers: await getHeaders(),
@@ -34,6 +42,8 @@ async function put(url: string, body: {}) {
 }
 
 async function del(url: string) {
+    console.log('=======================>>>>>>>>>>>>>>' + url);
+
     const requestOptions = {
         method: 'DELETE',
         headers: await getHeaders()

@@ -1,5 +1,4 @@
 ﻿using Duende.IdentityServer.Models;
-using IdentityModel;
 
 namespace IdentityService;
 
@@ -18,17 +17,24 @@ public static class Config
             new ApiScope("auctionApp", "Auction app full access"),
         };
 
-    public static IEnumerable<Client> Clients(IConfiguration config) =>
-        new Client[]
+    public static IEnumerable<Client> Clients(IConfiguration config) {
+        Console.WriteLine(">>>>>>>>>>>>>>>>>>>> " + config["ClientApp"]);
+        Console.WriteLine(">>>>>>>>>>>>>>>>>>>> " + config["ClientSecret"]);
+
+        return new Client[]
         {
             new Client
             {
                 ClientId = "postman",
                 ClientName = "Postman",
-                AllowedScopes = { "openid", "profile", "auctionApp" },
-                RedirectUris = { "https://www.getpostman.com/oauth2/callback" },
-                ClientSecrets = { new Secret("NotASecret".Sha256()) },
-                AllowedGrantTypes = { GrantType.ResourceOwnerPassword }
+                AllowedScopes = {"openid", "profile", "auctionApp"},
+                RedirectUris = {"https://www.getpostman.com/oauth2/callback"},
+                ClientSecrets = {new Secret(config["ClientSecret"].Sha256())},
+                AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                RequirePkce = false,
+                AllowOfflineAccess = true,
+                AccessTokenLifetime = 3600*24*30,
+                AlwaysIncludeUserClaimsInIdToken = true
             },
             new Client
             {
@@ -39,9 +45,10 @@ public static class Config
                 RequirePkce = false,
                 RedirectUris = {config["ClientApp"] + "/api/auth/callback/id-server"},
                 AllowOfflineAccess = true,
-                AllowedScopes = { "openid", "profile", "auctionApp" },
+                AllowedScopes = {"openid", "profile", "auctionApp"},
                 AccessTokenLifetime = 3600*24*30,
-                AlwaysIncludeUserClaimsInIdToken = true,
+                AlwaysIncludeUserClaimsInIdToken = true
             }
         };
+    }
 }

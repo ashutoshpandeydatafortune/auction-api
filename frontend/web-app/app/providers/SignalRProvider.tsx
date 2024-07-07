@@ -21,7 +21,7 @@ export default function SignalRProvider({ children, user }: Props) {
     const setCurrentPrice = useAuctionStore(state => state.setCurrentPrice);
     const addBid = useBidStore(state => state.addBid);
     const apiUrl = process.env.NEXT_PUBLIC_NOTIFY_URL;
-
+    console.log('api url = ' + apiUrl);
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
             .withUrl(apiUrl!)

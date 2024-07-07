@@ -12,6 +12,8 @@ import EmptyFilter from '../components/EmptyFilter';
 import { useAuctionStore } from 'hooks/useAuctionStore';
 
 export default function Listings() {
+    console.log('2.');
+
     const [loading, setLoading] = useState(true);
     const params = useParamsStore(state => ({
         pageNumber: state.pageNumber,
@@ -36,7 +38,10 @@ export default function Listings() {
         setParams({ pageNumber })
     }
 
+    console.log('3.' + url);
     useEffect(() => {
+        console.log('4.' + url);
+
         getData(url).then(data => {
             setData(data);
             setLoading(false);

@@ -9,6 +9,8 @@ type Props = {
 };
 
 export default function Heading({ title, subtitle, center }: Props) {
+    console.log('client env var = ' + process.env.NEXT_PUBLIC_NOTIFY_URL);
+
     return (
         <div className={center ? 'text-center' : 'text-start'}>
             <div className="text-2xl font-bold">
