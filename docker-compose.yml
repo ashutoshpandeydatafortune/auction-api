@@ -152,19 +152,19 @@ services:
       rabbitmq:
         condition: service_healthy
 
-  web-app:
-    image: ashutoshpandey/web-app
-    build:
-      context: .
-      dockerfile: frontend/web-app/Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXTAUTH_SECRET=somethingreallyreallysecret
-      - CLIENT_SECRET=NotASecret
-      - NEXTAUTH_URL=http://localhost:3000
-      - API_URL=http://gateway-svc/
-      - ID_URL=http://identity-svc:80
-      - NEXT_PUBLIC_NOTIFY_URL=http://gateway-svc/notifications
-    depends_on:
-      - identity-svc
+  # web-app:
+  #   image: ashutoshpandey/web-app
+  #   build:
+  #     context: .
+  #     dockerfile: frontend/web-app/Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NEXTAUTH_SECRET=somethingreallyreallysecret
+  #     - CLIENT_SECRET=NotASecret
+  #     - NEXTAUTH_URL=http://localhost:3000
+  #     - API_URL=http://gateway-svc/
+  #     - ID_URL=http://identity-svc:80
+  #     - NEXT_PUBLIC_NOTIFY_URL=http://gateway-svc/notifications
+  #   depends_on:
+  #     - identity-svc
