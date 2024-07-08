@@ -15,6 +15,14 @@
 	docker-compose build
 	docker-compose up
 
+## Setup vhosts
+
+Add following entry in vhost
+
+	127.0.0.1 		id.auction.com
+	127.0.0.1 		app.auction.com
+	127.0.0.1 		api.auction.com
+
 ## Setting up SSL on nginx
 
 We use the makecert utility
