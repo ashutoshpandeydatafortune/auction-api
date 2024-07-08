@@ -18,9 +18,6 @@ public static class Config
         };
 
     public static IEnumerable<Client> Clients(IConfiguration config) {
-        Console.WriteLine(">>>>>>>>>>>>>>>>>>>> " + config["ClientApp"]);
-        Console.WriteLine(">>>>>>>>>>>>>>>>>>>> " + config["ClientSecret"]);
-
         return new Client[]
         {
             new Client

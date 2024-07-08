@@ -166,3 +166,5 @@ bld/
 
 # Ignore mylocal_mongodata folder
 mylocal_mongodata/
+
+devcerts/*
