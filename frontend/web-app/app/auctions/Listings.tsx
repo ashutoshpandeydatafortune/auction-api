@@ -12,9 +12,8 @@ import EmptyFilter from '../components/EmptyFilter';
 import { useAuctionStore } from 'hooks/useAuctionStore';
 
 export default function Listings() {
-    console.log('2.');
-
     const [loading, setLoading] = useState(true);
+
     const params = useParamsStore(state => ({
         pageNumber: state.pageNumber,
         pageSize: state.pageSize,
@@ -24,11 +23,13 @@ export default function Listings() {
         seller: state.seller,
         winner: state.winner
     }), shallow)
+
     const data = useAuctionStore(state => ({
         auctions: state.auctions,
         totalCount: state.totalCount,
         pageCount: state.pageCount
     }), shallow);
+
     const setData = useAuctionStore(state => state.setData);
 
     const setParams = useParamsStore(state => state.setParams);
@@ -38,10 +39,7 @@ export default function Listings() {
         setParams({ pageNumber })
     }
 
-    console.log('3.' + url);
     useEffect(() => {
-        console.log('4.' + url);
-
         getData(url).then(data => {
             setData(data);
             setLoading(false);
@@ -62,7 +60,7 @@ export default function Listings() {
                             <AuctionCard auction={auction} key={auction.id} />
                         ))}
                     </div>
-                    <div className='flex justify-center mt-4'>
+                    <div className='flex justify-center mt-4 w-full'>
                         <AppPagination pageChanged={setPageNumber}
                             currentPage={params.pageNumber} pageCount={data.pageCount} />
                     </div>

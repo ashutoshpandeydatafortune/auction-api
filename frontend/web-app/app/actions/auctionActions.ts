@@ -6,7 +6,6 @@ import { fetchWrapper } from "app/lib/fetchWrapper";
 import { Auction, Bid, PagedResult } from "types/index";
 
 export async function getData(query: string): Promise<PagedResult<Auction>> {
-    console.log('a.' + query);
     return await fetchWrapper.get(`search/${query}`)
 }
 

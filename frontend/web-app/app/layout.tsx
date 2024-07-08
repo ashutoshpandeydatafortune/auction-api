@@ -1,8 +1,8 @@
 import { getCurrentUser } from './actions/authActions'
-import './globals.css'
 import Navbar from './nav/Navbar'
 import SignalRProvider from './providers/SignalRProvider'
 import ToasterProvider from './providers/ToasterProvider'
+import './globals.css'
 
 export const metadata = {
   title: 'Carsties',
@@ -24,9 +24,7 @@ export default async function RootLayout({
           <SignalRProvider user={user}>
             {children}
           </SignalRProvider>
-
         </main>
-
       </body>
     </html>
   )

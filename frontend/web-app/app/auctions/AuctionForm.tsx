@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, TextInput } from 'flowbite-react';
+import { Button } from 'flowbite-react';
 import React, { useEffect } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import Input from '../components/Input';
@@ -86,7 +86,6 @@ export default function AuctionForm({ auction }: Props) {
                             rules={{ required: 'Auction end date is required' }} />
                     </div>
                 </>}
-
 
             <div className='flex justify-between'>
                 <Button outline color='gray'>Cancel</Button>

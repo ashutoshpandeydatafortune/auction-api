@@ -53,10 +53,9 @@ export default function Filters() {
 
     return (
         <div className='flex justify-between items-center mb-4'>
-
             <div>
                 <span className='uppercase text-sm text-gray-500 mr-2'>Filter by</span>
-                <Button.Group>
+                <Button.Group className="flex">
                     {filterButtons.map(({ label, icon: Icon, value }) => (
                         <Button
                             key={value}
@@ -70,10 +69,9 @@ export default function Filters() {
                 </Button.Group>
             </div>
 
-
             <div>
                 <span className='uppercase text-sm text-gray-500 mr-2'>Order by</span>
-                <Button.Group>
+                <Button.Group className="flex">
                     {orderButtons.map(({ label, icon: Icon, value }) => (
                         <Button
                             key={value}
@@ -89,7 +87,7 @@ export default function Filters() {
 
             <div>
                 <span className='uppercase text-sm text-gray-500 mr-2'>Page size</span>
-                <Button.Group>
+                <Button.Group className="flex">
                     {pageSizeButtons.map((value, i) => (
                         <Button key={i}
                             onClick={() => setParams({ pageSize: value })}
