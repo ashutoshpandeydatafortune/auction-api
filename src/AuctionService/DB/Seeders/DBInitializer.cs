@@ -13,7 +13,7 @@ namespace AuctionService.DB.Seeders
             SeedData(scope.ServiceProvider.GetService<AuctionDBContext>());
         }
 
-        private static void SeedData(AuctionDBContext? context)
+        private static void SeedData(AuctionDBContext context)
         {
             if(context == null)
             {
