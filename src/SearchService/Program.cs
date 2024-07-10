@@ -1,4 +1,5 @@
 using MassTransit;
+using Polly;
 using SearchService.Consumers;
 using SearchService.Seeders;
 
@@ -41,15 +42,12 @@ var app = builder.Build();
 
 app.MapControllers();
 
-try
+app.Lifetime.ApplicationStarted.Register(async () =>
 {
-    Console.WriteLine("Setting up search database");
-    await DBInitializer.InitDb(app);
-}
-catch(Exception ex)
-{
-    Console.WriteLine("------------------------------------ Cannot setup search database: " + ex.Message);
-}
+    await Policy.Handle<TimeoutException>()
+    .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(10))
+    .ExecuteAndCaptureAsync(async () => await DBInitializer.InitDb(app));
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
